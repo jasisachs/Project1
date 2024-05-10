@@ -1,10 +1,14 @@
 import tkinter as tk
 from tkinter import messagebox
-from Project1_logic import StudentGrader
+from typing import List
 import csv
+from Project1_logic import StudentGrader
 
 class StudentGraderGUI:
-    def __init__(self, master):
+    """Class to create a GUI for student grading."""
+
+    def __init__(self, master: tk.Tk) -> None:
+        """Initialize the GUI."""
         self.master = master
         self.master.title("Student Grader")
 
@@ -23,7 +27,8 @@ class StudentGraderGUI:
         self.button = tk.Button(master, text="Calculate Grades", command=self.calculate_grades)
         self.button.pack()
 
-    def calculate_grades(self):
+    def calculate_grades(self) -> None:
+        """Calculate grades based on user input."""
         try:
             total_students = int(self.entry1.get())
             scores = list(map(int, self.entry2.get().split()))
@@ -42,7 +47,8 @@ class StudentGraderGUI:
         except ValueError:
             messagebox.showerror("Error", "Invalid input. Please enter integers only.")
 
-    def display_grades(self, total_students, scores, grades):
+    def display_grades(self, total_students: int, scores: List[int], grades: List[str]) -> None:
+        """Display grades in a new window."""
         result_window = tk.Toplevel(self.master)
         result_window.title("Grading Report")
 
@@ -54,14 +60,16 @@ class StudentGraderGUI:
             result_label = tk.Label(result_window, text=result_text)
             result_label.pack()
 
-    def save_to_csv(self, total_students, scores, grades):
+    def save_to_csv(self, total_students: int, scores: List[int], grades: List[str]) -> None:
+        """Save grades to a CSV file."""
         with open('grades.csv', 'w', newline='') as file:
             writer = csv.writer(file)
             writer.writerow(["Student", "Score", "Grade"])
             for i in range(total_students):
                 writer.writerow([i + 1, scores[i], grades[i]])
 
-    def load_from_csv(self):
+    def load_from_csv(self) -> None:
+        """Load grades from a CSV file."""
         try:
             with open('grading_results.csv', 'r') as file:
                 reader = csv.reader(file)
@@ -76,7 +84,6 @@ class StudentGraderGUI:
                     messagebox.showinfo("Info", "No data available in the CSV file.")
         except FileNotFoundError:
             messagebox.showinfo("Info", "No data available in the CSV file.")
-
 
 if __name__ == "__main__":
     root = tk.Tk()
